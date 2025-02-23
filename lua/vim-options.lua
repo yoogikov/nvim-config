@@ -14,17 +14,18 @@ vim.cmd([[
     endfunction
             ]])
 
-local term_buf = nil
-local term_win = nil
+--local term_buf = nil
+--local term_win = nil
+local is_created = false
+--local is_open = false
 
 function TermToggle(height)
-    if term_win and vim.api.nvim_win_is_valid(term_win) then
-        vim.cmd("hide")
+    if is_created==true then
+        vim.cmd("FloatermToggle")
     else
-        vim.cmd("botright new")
-        local new_buf = vim.api.nvim_get_current_buf()
-        vim.cmd("resize " .. height)
-        if term_buf and vim.api.nvim_buf_is_valid(term_buf) then
+        vim.cmd("FloatermNew")
+        is_created=true
+   --[[     if term_buf and vim.api.nvim_buf_is_valid(term_buf) then
             vim.cmd("buffer " .. term_buf)
             vim.cmd("bd " .. new_buf)
         else
@@ -34,13 +35,11 @@ function TermToggle(height)
             vim.wo.relativenumber = false
             vim.wo.signcolumn = "no"
         end
-    vim.cmd("startinsert!")
-    term_win = vim.api.nvim_get_current_win()
+--]]
     end
 end
 
-vim.keymap.set("n", "<C-]>", ":lua TermToggle(20)<CR>", { silent = true})
-vim.keymap.set("i", "<C-]>", "<Esc>:lua TermToggle(20)<CR>", { silent=true})
-vim.keymap.set("t", "<C-]>", "<C-\\><C-n>:lua TermToggle(20)<CR>", { silent=true})
-
+vim.keymap.set("n", "<C-space>", ":lua TermToggle(20)<CR>", { silent = true})
+vim.keymap.set("i", "<C-space>", "<Esc>:lua TermToggle(20)<CR>", { silent=true})
+vim.keymap.set("t", "<C-space>", "<C-\\><C-n>:lua TermToggle(20)<CR>", { silent=true})
 
